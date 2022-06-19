@@ -1,6 +1,7 @@
 # How to start
 
-
+Markup : 1: Clone down this repository
+2:
 
 
 
