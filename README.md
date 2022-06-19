@@ -1,3 +1,13 @@
+# How to start
+
+1. Clone down this repository
+2. cd cimdb
+3. npm install
+4. npm start
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
