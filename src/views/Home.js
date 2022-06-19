@@ -3,27 +3,24 @@ import client from '../api/client';
 import MovieCard from '../components/MovieCard';
 
 export function Home() {
-    const [comingSoon, setComingSoon] = useState([]);
+    // const [comingSoon, setComingSoon] = useState([]);
     const [mostPopular, setMostPopular] = useState([]);
     const [loading, setLoading] = useState(true);
     const [counter, setCounter] = useState(20);
     useEffect(() => {
         if (loading) {
-            client.get(`/ComingSoon/`).then(({ data }) => {
-                console.log('soon');
-                setComingSoon(data.items);
-            });
+            // client.get(`/ComingSoon/`).then(({ data }) => {
+            //     setComingSoon(data.items);
+            // });
             client.get('/mostpopularmovies/').then(({ data }) => {
-                console.log('getpop');
                 setMostPopular(data.items);
             });
         }
     }, [loading]);
 
     useEffect(() => {
-        if (mostPopular?.length > 0 && comingSoon?.length > 0)
-            setLoading(false);
-    }, [comingSoon, mostPopular]);
+        if (mostPopular?.length > 0) setLoading(false);
+    }, [mostPopular]);
     if (loading) {
         return (
             <div className="spinner-container">
@@ -92,7 +89,7 @@ export function Home() {
                             paddingBottom: '5px',
                         }}
                     >
-                        Compular IMDb
+                        C IMDb
                     </h2>
                     <div
                         style={{

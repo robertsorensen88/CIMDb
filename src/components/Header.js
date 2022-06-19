@@ -60,22 +60,6 @@ export function Header() {
             >
                 <p>Films</p>
             </Link>
-
-            <Link
-                style={
-                    activePage === '/about'
-                        ? {
-                              fontWeight: 'bolder',
-                              textDecoration: 'underline',
-                              textUnderlineOffset: '2px',
-                          }
-                        : {}
-                }
-                className="links"
-                to="/about"
-            >
-                <p>About</p>
-            </Link>
         </header>
     );
 }

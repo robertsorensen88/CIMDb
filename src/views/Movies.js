@@ -1,3 +1,102 @@
+import { useEffect, useState } from 'react';
+import client from '../api/client';
+import MovieCard from '../components/MovieCard';
+
 export function Movies() {
-    return <div>Movies</div>;
+    const [mostPopular, setMostPopular] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [counter, setCounter] = useState(25);
+    useEffect(() => {
+        if (loading) {
+            client.get(`/top250movies/`).then(({ data }) => {
+                setMostPopular(data.items);
+            });
+        }
+    }, [loading]);
+
+    useEffect(() => {
+        if (mostPopular?.length > 0) setLoading(false);
+    }, [mostPopular]);
+
+    function handleMore() {
+        setCounter(counter + 25);
+    }
+
+    if (loading) {
+        return (
+            <div className="spinner-container">
+                <div className="loading-spinner"></div>
+            </div>
+        );
+    }
+    return (
+        <div className="homediv">
+            <div
+                className="comingsoondiv"
+                style={{
+                    borderTop: 'solid 1px gray',
+                    borderBottom: 'solid 1px gray',
+                    paddingBottom: '50px',
+                }}
+            >
+                <div
+                    style={{ display: 'flex', justifyContent: 'space-between' }}
+                >
+                    <h2
+                        style={{
+                            color: 'whitesmoke',
+                            textAlign: 'left',
+                            paddingLeft: '12rem',
+                            marginBottom: '0px',
+                            paddingBottom: '5px',
+                        }}
+                    >
+                        Top 250 films
+                    </h2>
+                    <div
+                        style={{
+                            paddingRight: '12rem',
+                        }}
+                    >
+                        <h5>
+                            {counter} of {mostPopular.length}
+                        </h5>
+                    </div>
+                </div>
+                <div className="popmovies">
+                    {mostPopular &&
+                        mostPopular.length > 0 &&
+                        mostPopular.slice(0, counter).map((popmovie, i) => (
+                            <div
+                                style={
+                                    i + 1 < mostPopular.length
+                                        ? {
+                                              gap: '5',
+                                          }
+                                        : {}
+                                }
+                            >
+                                <MovieCard movie={popmovie} />
+                            </div>
+                        ))}
+                </div>
+
+                <h5 style={{ marginTop: '3rem' }}>
+                    {counter} of {mostPopular.length}
+                </h5>
+                {counter < 250 && (
+                    <button
+                        style={{
+                            marginTop: '1rem',
+                            padding: '1.5rem',
+                            cursor: 'pointer',
+                        }}
+                        onClick={() => handleMore()}
+                    >
+                        Show more...
+                    </button>
+                )}
+            </div>
+        </div>
+    );
 }
