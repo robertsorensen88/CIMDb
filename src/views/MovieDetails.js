@@ -13,7 +13,6 @@ export function MovieDetails() {
             setLoading(false);
         });
     }, [loading, movieId]);
-    console.log(movie);
     if (loading)
         return (
             <div className="spinner-container">

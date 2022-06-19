@@ -4,6 +4,8 @@ import MovieCard from '../components/MovieCard';
 
 export function Home() {
     // const [comingSoon, setComingSoon] = useState([]);
+    const [value, setValue] = useState('Sort');
+    const [defaultMovies, setDefualtMovies] = useState();
     const [mostPopular, setMostPopular] = useState([]);
     const [loading, setLoading] = useState(true);
     const [counter, setCounter] = useState(20);
@@ -13,14 +15,20 @@ export function Home() {
             //     setComingSoon(data.items);
             // });
             client.get('/mostpopularmovies/').then(({ data }) => {
-                setMostPopular(data.items);
+                setDefualtMovies(
+                    data.items.sort((a, b) => b.imDbRating - a.imDbRating)
+                );
+                setMostPopular(
+                    data.items.sort((a, b) => b.imDbRating - a.imDbRating)
+                );
             });
         }
     }, [loading]);
 
     useEffect(() => {
-        if (mostPopular?.length > 0) setLoading(false);
-    }, [mostPopular]);
+        if (mostPopular?.length > 0 && defaultMovies?.length > 0)
+            setLoading(false);
+    }, [mostPopular, defaultMovies]);
     if (loading) {
         return (
             <div className="spinner-container">
@@ -31,6 +39,43 @@ export function Home() {
 
     function handleMore() {
         setCounter(counter + 20);
+    }
+    function handleSort(event) {
+        setDefualtMovies(defaultMovies);
+        setValue(event.target.value);
+        switch (event.target.value) {
+            case 'rating':
+                return setMostPopular(
+                    mostPopular.sort((a, b) => b.imDbRating - a.imDbRating)
+                );
+            case 'lettersortza':
+                return setMostPopular(
+                    mostPopular.sort((a, b) => {
+                        if (a.title > b.title) {
+                            return -1;
+                        }
+                        if (a.title < b.title) {
+                            return 1;
+                        }
+                        return 0;
+                    })
+                );
+            case 'lettersortaz':
+                return setMostPopular(
+                    mostPopular.sort((a, b) => {
+                        if (a.title < b.title) {
+                            return -1;
+                        }
+                        if (a.title > b.title) {
+                            return 1;
+                        }
+                        return 0;
+                    })
+                );
+
+            default:
+                return setMostPopular(defaultMovies);
+        }
     }
     return (
         <div className="homediv">
@@ -91,9 +136,12 @@ export function Home() {
                     >
                         C IMDb
                     </h2>
+
                     <div
                         style={{
                             paddingRight: '12rem',
+                            display: 'flex',
+                            flexDirection: 'column',
                         }}
                     >
                         {/* <select
@@ -116,6 +164,26 @@ export function Home() {
                         <h5>
                             {counter} of {mostPopular.length}
                         </h5>
+                        <select
+                            name="sort"
+                            id="sort"
+                            style={{
+                                marginTop: '1rem',
+                                backgroundColor: 'black',
+                                color: 'white',
+                                cursor: 'pointer',
+                                border: '0.25px solid white',
+                                borderRadius: '5px',
+                                fontWeight: 'bold',
+                                marginRight: '5px',
+                            }}
+                            value={value}
+                            onChange={handleSort}
+                        >
+                            <option value="rating">Rating</option>
+                            <option value="lettersortaz">A-Z</option>
+                            <option value="lettersortza">Z-A</option>
+                        </select>
                     </div>
                 </div>
                 <div className="comingsoonmovies">

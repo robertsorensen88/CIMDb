@@ -1,15 +1,14 @@
 import { Link } from 'react-router-dom';
 import { AiFillStar } from 'react-icons/ai';
 
-export default function MovieCard({ movie, onclick }) {
-    console.log(movie);
+export default function MovieCard({ movie }) {
     return (
         <div className="moviecardlist">
             <div className="moviecard">
                 <Link className="movielink" to={`/film/${movie.id}`}>
                     <div className="movieinfo">
                         {movie.imDbRating && (
-                            <div class="positioning">
+                            <div className="positioning">
                                 <AiFillStar
                                     style={{
                                         color: 'yellow',
